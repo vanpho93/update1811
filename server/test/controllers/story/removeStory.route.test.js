@@ -3,6 +3,7 @@ const request = require('supertest');
 const Story = require('../../../src/models/Story');
 const User = require('../../../src/models/User');
 const app = require('../../../src/app');
+const { INVALID_TOKEN, CANNOT_FIND_STORY, INVALID_OBJECT_ID } = require('../../../src/lib/ErrorCode');
 
 describe('Test DELETE /story:id', () => {
     let token1, token2, storyId;
@@ -36,6 +37,7 @@ describe('Test DELETE /story:id', () => {
         .set({ token: 'ascdgahsbd' });
         assert.equal(status, 400);
         assert.equal(body.success, false);
+        assert.equal(body.code, INVALID_TOKEN)
         const stories = await Story.find({});
         assert.equal(stories.length, 2);
     });
@@ -46,6 +48,18 @@ describe('Test DELETE /story:id', () => {
         .set({ token: token2 });
         assert.equal(status, 404);
         assert.equal(body.success, false);
+        assert.equal(body.code, CANNOT_FIND_STORY);
+        const stories = await Story.find({});
+        assert.equal(stories.length, 2);
+    });
+
+    it('Cannot remove story with invalid story id', async () => {
+        const { status, body } = await request(app)
+        .delete(`/story/${storyId}x`)
+        .set({ token: token2 });
+        assert.equal(status, 400);
+        assert.equal(body.success, false);
+        assert.equal(body.code, INVALID_OBJECT_ID);
         const stories = await Story.find({});
         assert.equal(stories.length, 2);
     });

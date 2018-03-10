@@ -3,8 +3,9 @@ const request = require('supertest');
 const Story = require('../../../src/models/Story');
 const User = require('../../../src/models/User');
 const app = require('../../../src/app');
+const { INVALID_TOKEN, CANNOT_FIND_STORY, INVALID_OBJECT_ID } = require('../../../src/lib/ErrorCode');
 
-describe('POST /like', () => {
+describe.only('POST /like', () => {
     let token1, token2, storyId;
 
     beforeEach('Create user for test', async () => {
@@ -35,7 +36,8 @@ describe('POST /like', () => {
         .post(`/like/123`)
         .set({ token: token2 })
         .send({});
-        assert.equal(response.status, 404);
+        assert.equal(response.status, 400);
+        assert.equal(response.body.code, INVALID_OBJECT_ID);
         const story = await Story.findById(storyId).populate('fans');
         assert.equal(story.fans.length, 0);
     });
@@ -47,7 +49,7 @@ describe('POST /like', () => {
         .send({});
         assert.equal(response.status, 404);
         assert.equal(response.body.success, false);
-        assert.equal(response.body.message, 'Cannot find story');
+        assert.equal(response.body.code, CANNOT_FIND_STORY);
         const story = await Story.findById(storyId).populate('fans');
         assert.equal(story.fans.length, 0);
     });

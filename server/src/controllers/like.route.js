@@ -15,7 +15,11 @@ router.post('/:idObject', mustBeUser, parser, (req, res) => {
     }
     Story.likeAStory(req.idUser, req.params.idObject)
     .then(story => res.send({ success: true, story }))
-    .catch(err => res.status(404).send({ success: false, message: err.message }));
+    .catch(error => {
+        res
+        .status(error.statusCode)
+        .send({ success: false, message: error.message, code: error.code });
+    })
 });
 
 module.exports = router;

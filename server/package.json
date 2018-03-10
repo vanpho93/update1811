@@ -10,7 +10,7 @@
     "supertest": "^3.0.0"
   },
   "scripts": {
-    "test": "NODE_ENV=test nodemon --exec mocha -R min --recursive",
+    "test": "NODE_ENV=test nodemon --exec mocha --recursive",
     "server": "nodemon src/index.js",
     "start": "node src/index.js"
   },

@@ -3,6 +3,7 @@ const request = require('supertest');
 const User = require('../../../src/models/User');
 const app = require('../../../src/app');
 const { verify } = require('../../../src/lib/jwt');
+const { INVALID_SIGN_IN_USER_INFO } = require('../../../src/lib/ErrorCode');
 
 describe('Test POST /user/signup', () => {
     let idUser;
@@ -29,15 +30,17 @@ describe('Test POST /user/signup', () => {
         const response = await request(app)
         .post('/user/signin')
         .send({ email: 'teo@gmail.com', password: '1234' });
-        const { success } = response.body;
+        const { success, code } = response.body;
         assert.equal(success, false);
+        assert.equal(code, INVALID_SIGN_IN_USER_INFO);
     });
 
     it('Cannot sign in with wrong email', async () => {
         const response = await request(app)
         .post('/user/signin')
         .send({ email: 'teo1@gmail.com', password: '1234' });
-        const { success } = response.body;
+        const { success, code } = response.body;
         assert.equal(success, false);
+        assert.equal(code, INVALID_SIGN_IN_USER_INFO);
     });
 });

@@ -2,6 +2,7 @@ const assert = require('assert');
 const request = require('supertest');
 const User = require('../../../src/models/User');
 const app = require('../../../src/app');
+const { INVALID_SIGN_UP_USER_INFO, EMAIL_EXISTED } = require('../../../src/lib/ErrorCode');
 
 describe('Test POST /user/signup', () => {
     it('Can sign up by POST', async () => {
@@ -24,6 +25,8 @@ describe('Test POST /user/signup', () => {
         .post('/user/signup')
         .send({ email: 'teo@gmail.com', password: '321', name: 'Teo 2' });
         assert.equal(response.body.success, false);
+        assert.equal(response.body.code, EMAIL_EXISTED);
+        assert.equal(response.status, 409);
     });
 
     it('Cannot sign up without email', async () => {
@@ -31,5 +34,7 @@ describe('Test POST /user/signup', () => {
         .post('/user/signup')
         .send({ email: '', password: '321', name: 'Teo 2' });
         assert.equal(response.body.success, false);
+        assert.equal(response.body.code, INVALID_SIGN_UP_USER_INFO);
+        assert.equal(response.status, 400);
     });
 });
