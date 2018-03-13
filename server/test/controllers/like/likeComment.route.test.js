@@ -4,6 +4,7 @@ const Story = require('../../../src/models/Story');
 const User = require('../../../src/models/User');
 const Comment = require('../../../src/models/Comment');
 const app = require('../../../src/app');
+const { CANNOT_FIND_COMMENT, INVALID_OBJECT_ID, INVALID_TOKEN } = require('../../../src/lib/ErrorCode');
 
 describe('POST /like/:idObject', () => {
     let token1, token2, storyId, commentId;
@@ -28,5 +29,35 @@ describe('POST /like/:idObject', () => {
         .set({ token: token1 })
         .send({ forComment: true });
         assert.equal(response.body.success, true);
+    });
+
+    it('Cannot like a removed comment', async () => {
+        await Comment.findByIdAndRemove(commentId);
+        const response = await request(app)
+        .post(`/like/${commentId}`)
+        .set({ token: token1 })
+        .send({ forComment: true });
+        assert.equal(response.body.success, false);
+        assert.equal(response.body.code, CANNOT_FIND_COMMENT);
+        assert.equal(response.status, 404);
+    });
+
+    it('Cannot like comment with invalid comment id', async () => {
+        const response = await request(app)
+        .post(`/like/${commentId}x`)
+        .set({ token: token1 })
+        .send({ forComment: true });
+        assert.equal(response.body.success, false);
+        assert.equal(response.body.code, INVALID_OBJECT_ID);
+        assert.equal(response.status, 400);
+    });
+
+    it('Cannot like comment without token', async () => {
+        const response = await request(app)
+        .post(`/like/${commentId}`)
+        .send({ forComment: true });
+        assert.equal(response.body.success, false);
+        assert.equal(response.body.code, INVALID_TOKEN);
+        assert.equal(response.status, 400);
     });
 });

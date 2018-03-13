@@ -4,8 +4,9 @@ const Story = require('../../../src/models/Story');
 const User = require('../../../src/models/User');
 const Comment = require('../../../src/models/Comment');
 const app = require('../../../src/app');
+const { INVALID_TOKEN, CANNOT_FIND_STORY, INVALID_OBJECT_ID, INVALID_COMMENT, CANNOT_FIND_COMMENT } = require('../../../src/lib/ErrorCode');
 
-describe('DELETE /comment/:id', () => {
+describe.only('DELETE /comment/:id', () => {
     let token1, token2, storyId, commentId;
 
     beforeEach('Create user for test', async () => {
@@ -39,17 +40,21 @@ describe('DELETE /comment/:id', () => {
         .delete(`/comment/${commentId}`)
         .set({ token: token1 });
         assert.equal(response.body.success, false);
+        assert.equal(response.body.code, CANNOT_FIND_COMMENT);
     });
 
     it('Cannot remove comment without token', async() => {
         const response = await request(app)
         .delete(`/comment/${commentId}`)
         assert.equal(response.body.success, false);
+        assert.equal(response.body.code, INVALID_TOKEN);
     });
 
     it('Cannot remove comment with wrong commentId', async() => {
         const response = await request(app)
         .delete(`/comment/${commentId}x`)
+        .set({ token: token1 });
         assert.equal(response.body.success, false);
+        assert.equal(response.body.code, INVALID_OBJECT_ID);
     });
 });

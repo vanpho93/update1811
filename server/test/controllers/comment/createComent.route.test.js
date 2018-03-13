@@ -4,6 +4,7 @@ const Story = require('../../../src/models/Story');
 const User = require('../../../src/models/User');
 const Comment = require('../../../src/models/Comment');
 const app = require('../../../src/app');
+const { INVALID_TOKEN, CANNOT_FIND_STORY, INVALID_OBJECT_ID, INVALID_COMMENT } = require('../../../src/lib/ErrorCode');
 
 describe('POST /comment', () => {
     let token1, token2, storyId;
@@ -39,21 +40,26 @@ describe('POST /comment', () => {
         .send({ content: 'MEAN1811', storyId });
         assert.equal(response.status, 400);
         assert.equal(response.body.success, false);
+        assert.equal(response.body.code, INVALID_TOKEN);
     });
 
     it('Cannot add comment with wrong idStory', async () => {
         const response = await request(app)
         .post('/comment')
+        .set({ token: token2 })
         .send({ content: 'MEAN1811', storyId: 'jedq8eu02ie9ruifjdkac' });
         assert.equal(response.status, 400);
         assert.equal(response.body.success, false);
+        assert.equal(response.body.code, INVALID_OBJECT_ID);
     });
 
     it('Cannot add comment without content', async () => {
         const response = await request(app)
         .post('/comment')
+        .set({ token: token2 })
         .send({ storyId });
-        assert.equal(response.status, 400);
+        assert.equal(response.status, 401);
         assert.equal(response.body.success, false);
+        assert.equal(response.body.code, INVALID_COMMENT);
     });
 });

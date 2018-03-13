@@ -11,7 +11,11 @@ router.post('/:idObject', mustBeUser, parser, (req, res) => {
     if(forComment) {
         return Comment.likeComment(req.idUser, req.params.idObject)
         .then(comment => res.send({ success: true, comment }))
-        .catch(err => res.status(404).send({ success: false, message: err.message }));
+        .catch(error => {
+            res
+            .status(error.statusCode)
+            .send({ success: false, message: error.message, code: error.code });
+        })
     }
     Story.likeAStory(req.idUser, req.params.idObject)
     .then(story => res.send({ success: true, story }))

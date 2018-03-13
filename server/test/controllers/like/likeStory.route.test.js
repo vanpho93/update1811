@@ -5,7 +5,7 @@ const User = require('../../../src/models/User');
 const app = require('../../../src/app');
 const { INVALID_TOKEN, CANNOT_FIND_STORY, INVALID_OBJECT_ID } = require('../../../src/lib/ErrorCode');
 
-describe.only('POST /like', () => {
+describe('POST /like', () => {
     let token1, token2, storyId;
 
     beforeEach('Create user for test', async () => {
