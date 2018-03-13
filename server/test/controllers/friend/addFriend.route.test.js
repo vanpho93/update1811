@@ -3,6 +3,7 @@ const request = require('supertest');
 const User = require('../../../src/models/User');
 const app = require('../../../src/app');
 const { verify } = require('../../../src/lib/jwt');
+const { CANNOT_FIND_USER, INVALID_FRIEND_REQUEST } = require('../../../src/lib/ErrorCode');
 
 describe('Test POST /friend/request', () => {
     let idUser1, idUser2, token1, token2;
@@ -40,7 +41,8 @@ describe('Test POST /friend/request', () => {
         .post('/friend/request')
         .set({ token: token1 })
         .send({ idFriend: idUser2 });
-        assert.equal(response.body.error, 'Invalid friend request.');
+        assert.equal(response.body.code, INVALID_FRIEND_REQUEST);
+        assert.equal(response.status, 401);
     });
 
     it('Cannot send request for user, who sent you,', async () => {
@@ -49,6 +51,7 @@ describe('Test POST /friend/request', () => {
         .post('/friend/request')
         .set({ token: token2 })
         .send({ idFriend: idUser1 });
-        assert.equal(response.body.error, 'Invalid friend request.');
+        assert.equal(response.body.code, INVALID_FRIEND_REQUEST);
+        assert.equal(response.status, 401);
     });
 });

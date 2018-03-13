@@ -6,7 +6,7 @@ const Comment = require('../../../src/models/Comment');
 const app = require('../../../src/app');
 const { INVALID_TOKEN, CANNOT_FIND_STORY, INVALID_OBJECT_ID, INVALID_COMMENT, CANNOT_FIND_COMMENT } = require('../../../src/lib/ErrorCode');
 
-describe.only('DELETE /comment/:id', () => {
+describe('DELETE /comment/:id', () => {
     let token1, token2, storyId, commentId;
 
     beforeEach('Create user for test', async () => {

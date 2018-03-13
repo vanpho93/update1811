@@ -3,6 +3,7 @@ const request = require('supertest');
 const User = require('../../../src/models/User');
 const app = require('../../../src/app');
 const { verify } = require('../../../src/lib/jwt');
+const { CANNOT_FIND_USER } = require('../../../src/lib/ErrorCode');
 
 describe('Test POST /friend/accept', () => {
     let idUser1, idUser2, idUser3, token1, token2, token3;
@@ -46,7 +47,8 @@ describe('Test POST /friend/accept', () => {
         .post('/friend/accept')
         .set({ token: token3 })
         .send({ idFriend: idUser1 });
-        assert.equal(response.body.error, 'Cannot find user.');
+        assert.equal(response.status, 404);
+        assert.equal(response.body.code, CANNOT_FIND_USER);
     });
 
     it('Cannot accept friend', async () => {
@@ -54,6 +56,7 @@ describe('Test POST /friend/accept', () => {
         .post('/friend/accept')
         .set({ token: token1 })
         .send({ idFriend: idUser2 });
-        assert.equal(response.body.error, 'Cannot find user.');
+        assert.equal(response.status, 404);
+        assert.equal(response.body.code, CANNOT_FIND_USER);
     });
 });

@@ -2,8 +2,9 @@ const assert = require('assert');
 const request = require('supertest');
 const User = require('../../../src/models/User');
 const app = require('../../../src/app');
+const { CANNOT_FIND_USER, INVALID_FRIEND_REQUEST, INVALID_TOKEN, INVALID_OBJECT_ID } = require('../../../src/lib/ErrorCode');
 
-describe('Test DELETE /friend/:idFriend', () => {
+describe.only('Test DELETE /friend/:idFriend', () => {
     let idUser1, idUser2, idUser3, token1, token2, token3;
     
     beforeEach('Create users for test', async () => {
@@ -37,6 +38,19 @@ describe('Test DELETE /friend/:idFriend', () => {
         const response = await request(app)
         .delete(`/friend/${idUser1}`)
         .set({ token: token3 });
-        assert.equal(response.body.error, 'Cannot find user.');
+        assert.equal(response.body.code, CANNOT_FIND_USER);
+    });
+
+    it('Cannot remove friend without token', async () => {
+        const response = await request(app)
+        .delete(`/friend/${idUser1}`)
+        assert.equal(response.body.code, INVALID_TOKEN);
+    });
+
+    it('Cannot remove friend with wrong friend id', async () => {
+        const response = await request(app)
+        .delete(`/friend/${idUser1}x`)
+        .set({ token: token2 });
+        assert.equal(response.body.code, INVALID_OBJECT_ID);
     });
 });

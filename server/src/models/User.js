@@ -2,12 +2,14 @@ const mongoose = require('mongoose');
 const { hash, compare } = require('bcrypt');
 const { sign, verify } = require('../lib/jwt');
 const MyError = require('../lib/MyError');
+const { checkObjectIds } = require('../lib/checkObjectIds');
 const {
     INVALID_SIGN_IN_USER_INFO,
     CANNOT_FIND_USER,
     INVALID_SIGN_UP_USER_INFO,
     EMAIL_EXISTED,
-    INVALID_TOKEN
+    INVALID_TOKEN,
+    INVALID_FRIEND_REQUEST
 } = require('../lib/ErrorCode');
 
 const userSchema = new mongoose.Schema({
@@ -64,6 +66,7 @@ class User extends UserModel {
     }
 
     static async addFriend(idUser, idFriend) {
+        checkObjectIds([idUser, idFriend]);
         const userTest = await User.findOne({
             _id: idUser,
             $or: [
@@ -72,25 +75,26 @@ class User extends UserModel {
                 { friends: { $all: [idFriend] } },
             ]
         });
-        if (userTest) throw new Error('Invalid friend request.');
+        if (userTest) throw new MyError('Invalid friend request.', INVALID_FRIEND_REQUEST, 401);
         const user = await User.findByIdAndUpdate(idUser, { $addToSet: { sentRequests: idFriend } })
-        if (!user) throw new Error('Cannot find user.');
+        if (!user) throw new MyError('Cannot find user.', CANNOT_FIND_USER, 404);
         const friend = await User.findByIdAndUpdate(idFriend, { $addToSet: { incommingRequests: idUser } }).select(['email', 'name', 'stories']);
         if (!friend) {
             await User.findByIdAndUpdate(idUser, { $pull: { sentRequests: idFriend } });
-            throw new Error('Cannot find user.');
+            throw new MyError('Cannot find user.', CANNOT_FIND_USER, 404);
         }
         return friend;
     }
 
     static async acceptFriend(idUser, idFriend) {
+        checkObjectIds([idFriend, idUser]);
         const queryObject1 = { _id: idUser, incommingRequests: { $all: [idFriend] } };
         const updateObject1 = { 
             $pull: { incommingRequests: idFriend },
             $addToSet: { friends: idFriend }
         };
         const user = await User.findOneAndUpdate(queryObject1, updateObject1);
-        if (!user) throw new Error('Cannot find user.');
+        if (!user) throw new MyError('Cannot find user.', CANNOT_FIND_USER, 404);
         const queryObject2 = { _id: idFriend, sentRequests: { $all: [idUser] } };
         const updateObject2 = { 
             $pull: { sentRequests: idUser },
@@ -99,17 +103,18 @@ class User extends UserModel {
         const friend = await User.findOneAndUpdate(queryObject2, updateObject2).select(['email', 'name', 'stories']);
         if (!friend) {
             await User.findByIdAndUpdate(idUser, { $pull: { friends: idFriend } });
-            throw new Error('Cannot find friend.');
+            throw new MyError('Cannot find user', CANNOT_FIND_USER, 404);
         }
         return friend;
     }
 
     static async removeFriend(idUser, idFriend) {
+        checkObjectIds([idUser, idFriend]);
         const queryObject1 = { _id: idUser, friends: { $all: [idFriend] } };
         const user = await User.findOneAndUpdate(queryObject1, { $pull: { friends: idFriend } });
-        if (!user) throw new Error('Cannot find user.');
+        if (!user) throw new MyError('Cannot find user', CANNOT_FIND_USER, 404);
         const friend = await User.findByIdAndUpdate(idFriend, { $pull: { friends: idUser } }).select(['email', 'name', 'stories']);
-        if (!friend) throw new Error('Cannot find friend.');
+        if (!friend) throw new MyError('Cannot find user', CANNOT_FIND_USER, 404);
         return friend;
     }
 }
