@@ -38,7 +38,7 @@ class User extends UserModel {
     }
 
     static async signIn(email, password) {
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email }).populate('stories');
         if (!user) throw new MyError('Invalid user info.', INVALID_SIGN_IN_USER_INFO, 404);
         const same = await compare(password, user.password);
         if (!same) throw new MyError('Invalid user info.', INVALID_SIGN_IN_USER_INFO, 404);
@@ -54,7 +54,7 @@ class User extends UserModel {
         .catch(error => {
             throw new MyError('Invalid token.', INVALID_TOKEN, 400);
         });
-        const user = await User.findById(_id).catch(error => {
+        const user = await User.findById(_id).populate('stories').catch(error => {
             throw new MyError('Cannot find user', INVALID_TOKEN, 400);
         });
         if (!user) throw new MyError('Cannot find user', CANNOT_FIND_USER, 404);

@@ -11,7 +11,7 @@ const { checkObjectIds } = require('../lib/checkObjectIds');
 const storySchema = new mongoose.Schema({
     author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     content: { type: String, required: true },
-    title: { type: String, required: true, unique: true },
+    title: { type: String },
     fans: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }]
 });

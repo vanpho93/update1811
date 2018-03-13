@@ -1,3 +1,5 @@
-<p>
-  home-page works!
-</p>
+<form (ngSubmit)="createStory();" [formGroup]="storyForm">
+  <textarea formControlName="content" id="" cols="30" rows="5" class="form-control" placeholder="Bạn đang nghĩ gì?"></textarea>
+  <br>
+  <button class="btn btn-success">Đăng</button>
+</form>

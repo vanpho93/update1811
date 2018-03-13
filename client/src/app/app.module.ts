@@ -19,6 +19,10 @@ import { userReducer } from './ngrx/user';
 // guards
 import { MustLoggedInGuard } from './must-logged-in.guard';
 import { MustBeGuestGuard } from './must-be-guest.guard';
+// service
+import { UserService } from './services/user.service';
+import { StoryService } from './services/story.service';
+import { RequestWithToken } from './services/request-with-token.service';
 
 const routesConfig: Routes = [
   { path: '', component: HomePageComponent },
@@ -49,7 +53,13 @@ const routesConfig: Routes = [
     RouterModule.forRoot(routesConfig),
     StoreModule.forRoot({ user: userReducer, checked: checkedReducer })
   ],
-  providers: [MustLoggedInGuard, MustBeGuestGuard],
+  providers: [
+    MustLoggedInGuard,
+    MustBeGuestGuard,
+    RequestWithToken,
+    UserService,
+    StoryService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
