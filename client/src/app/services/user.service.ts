@@ -13,7 +13,7 @@ export class UserService {
     signIn(email: string, password: string) {
         const body = JSON.stringify({ email, password });
         const headers = new Headers({ 'Content-Type': 'application/json' });
-        return this.http.post(`${SERVER_URL}/signin`, body, { headers })
+        return this.http.post(`${SERVER_URL}/user/signin`, body, { headers })
         .toPromise()
         .then(res => res.json())
         .catch(res => res.json())
@@ -31,7 +31,7 @@ export class UserService {
         const headers = new Headers();
         headers.append('Content-Type', 'application/json');
         headers.append('token', token);
-        return this.http.post(`${SERVER_URL}/check`, null, { headers })
+        return this.http.post(`${SERVER_URL}/user/check`, null, { headers })
         .toPromise()
         .then(res => res.json())
         .catch(res => res.json())

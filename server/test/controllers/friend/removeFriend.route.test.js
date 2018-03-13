@@ -4,7 +4,7 @@ const User = require('../../../src/models/User');
 const app = require('../../../src/app');
 const { CANNOT_FIND_USER, INVALID_FRIEND_REQUEST, INVALID_TOKEN, INVALID_OBJECT_ID } = require('../../../src/lib/ErrorCode');
 
-describe.only('Test DELETE /friend/:idFriend', () => {
+describe('Test DELETE /friend/:idFriend', () => {
     let idUser1, idUser2, idUser3, token1, token2, token3;
     
     beforeEach('Create users for test', async () => {

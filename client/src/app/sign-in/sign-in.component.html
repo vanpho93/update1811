@@ -1,3 +1,16 @@
-<button class="btn btn-warning" (click)="signIn();">
-    Send sign in request
-</button>
+<form class="form-group" [formGroup]="formSignIn" (ngSubmit)="signIn();">
+    <div class="form-group">
+        <label for="">Email</label>
+        <input class="form-control" placeholder="Enter email" formControlName="email">
+    </div>
+    <div class="form-group">
+        <label for="">Password</label>
+        <input
+            class="form-control"
+            placeholder="Enter password"
+            formControlName="password"
+            type="password"
+        >
+    </div>
+    <button class="btn btn-success">Sign in</button>
+</form>

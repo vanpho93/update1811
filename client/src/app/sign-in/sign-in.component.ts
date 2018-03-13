@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user.service';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-sign-in',
@@ -8,11 +9,18 @@ import { UserService } from '../services/user.service';
   providers: [UserService]
 })
 export class SignInComponent implements OnInit {
-  constructor(private userService: UserService) {}
+  formSignIn: FormGroup;
+  constructor(private userService: UserService, private fb: FormBuilder) {}
   
-  ngOnInit() {}
+  ngOnInit() {
+    this.formSignIn = this.fb.group({
+      email: '',
+      password: ''
+    });
+  }
 
   signIn() {
-    this.userService.signIn('teo@gmail.com', '321');
+    const { email, password } = this.formSignIn.value;
+    this.userService.signIn(email, password);
   }
 }
