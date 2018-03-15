@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { UserService } from './services/user.service';
+import { AppState } from './types';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +13,7 @@ import { UserService } from './services/user.service';
 export class AppComponent implements OnInit {
   checked: Observable<boolean>;
 
-  constructor(private store: Store<any>, private userService: UserService) {
+  constructor(private store: Store<AppState>, private userService: UserService) {
     this.checked = this.store.select('checked');
   }
 

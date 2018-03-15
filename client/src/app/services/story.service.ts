@@ -9,5 +9,10 @@ export class StoryService {
 
     createStory(content: string) {
         return this.request.post('/story', { content })
-    }    
+    }
+
+    getAllStory() {
+        return this.request.get('/story')
+        .then(response => console.log(response));
+    }
 }

@@ -20,7 +20,6 @@ export class HomePageComponent implements OnInit {
   createStory() {
     const { content } = this.storyForm.value;
     this.storyService.createStory(content)
-    .then(story => alert(JSON.stringify(story)))
     .catch(error => console.log(error));
   }
 }

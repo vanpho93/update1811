@@ -54,7 +54,7 @@ class User extends UserModel {
         .catch(error => {
             throw new MyError('Invalid token.', INVALID_TOKEN, 400);
         });
-        const user = await User.findById(_id).populate('stories').catch(error => {
+        const user = await User.findById(_id).catch(error => {
             throw new MyError('Cannot find user', INVALID_TOKEN, 400);
         });
         if (!user) throw new MyError('Cannot find user', CANNOT_FIND_USER, 404);

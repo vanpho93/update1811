@@ -16,6 +16,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 // reducers
 import { checkedReducer } from './ngrx/checked';
 import { userReducer } from './ngrx/user';
+import { storiesReducer } from './ngrx/stories';
 // guards
 import { MustLoggedInGuard } from './must-logged-in.guard';
 import { MustBeGuestGuard } from './must-be-guest.guard';
@@ -51,7 +52,11 @@ const routesConfig: Routes = [
     ReactiveFormsModule,
     HttpModule,
     RouterModule.forRoot(routesConfig),
-    StoreModule.forRoot({ user: userReducer, checked: checkedReducer })
+    StoreModule.forRoot({
+      user: userReducer,
+      checked: checkedReducer,
+      stories: storiesReducer
+    })
   ],
   providers: [
     MustLoggedInGuard,
