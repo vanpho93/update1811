@@ -13,6 +13,9 @@ export class StoryService {
 
     getAllStory() {
         return this.request.get('/story')
-        .then(response => console.log(response));
+        .then(response => {
+            if (!response.success) return;
+            this.store.dispatch({ type: 'SET_STORIES', stories: response.stories });
+        });
     }
 }

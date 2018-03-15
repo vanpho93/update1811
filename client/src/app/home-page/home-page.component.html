@@ -1,5 +1,15 @@
-<form (ngSubmit)="createStory();" [formGroup]="storyForm">
-  <textarea formControlName="content" id="" cols="30" rows="5" class="form-control" placeholder="Bạn đang nghĩ gì?"></textarea>
-  <br>
-  <button class="btn btn-success">Đăng</button>
-</form>
+<div *ngIf="!(user | async)">
+  <a routerLink="/signin">Sign In to continue</a>
+</div>
+<div *ngIf="user | async">
+  <form (ngSubmit)="createStory();" [formGroup]="storyForm">
+    <textarea formControlName="content" id="" cols="30" rows="5" class="form-control" placeholder="Bạn đang nghĩ gì?"></textarea>
+    <br>
+    <button class="btn btn-success">Đăng</button>
+  </form>
+  <div class="story-container">
+    <div class="story" *ngFor="let story of (stories | async)">
+      <pre>{{ story | json }}</pre>
+    </div>
+  </div>
+</div>
