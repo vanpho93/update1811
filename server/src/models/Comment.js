@@ -24,7 +24,7 @@ class Comment extends CommentModel {
         await comment.save();
         const updateObject = { $push: { comments: comment._id } };
         await Story.findByIdAndUpdate(idStory, updateObject);
-        return comment;
+        return Comment.populate(comment, { path: 'user', select: 'name' });
     }
 
     static async removeComment(idUser, idComment) {

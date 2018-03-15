@@ -6,7 +6,7 @@ const mustBeUser = require('./mustBeUser.middleware');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    Story.find({}).populate('author', 'name')
+    Story.find({}).populate('author', 'name').populate({ path: 'comments', populate: { path: 'user', select: 'name' } }).limit(30)
     .then(stories => res.send({ success: true, stories }));
 });
 
