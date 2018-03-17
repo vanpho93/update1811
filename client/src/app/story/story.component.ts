@@ -19,4 +19,8 @@ export class StoryComponent implements OnInit {
     this.storyService.createComment(this.comment, this.storyInfo._id)
     .then(() => this.comment = '');
   }
+
+  likeStory() {
+    this.storyService.likeStory(this.storyInfo._id);
+  }
 }

@@ -21,7 +21,7 @@ router.post('/:idObject', mustBeUser, parser, (req, res) => {
     .then(story => res.send({ success: true, story }))
     .catch(error => {
         res
-        .status(error.statusCode)
+        .status(error.statusCode ? error.statusCode : 500)
         .send({ success: false, message: error.message, code: error.code });
     })
 });

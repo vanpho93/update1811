@@ -33,8 +33,4 @@ export class HomePageComponent implements OnInit {
     .catch(error => console.log(error))
     .then(() => this.storyForm.patchValue({ content: '' }));
   }
-
-  likeStory(_id) {
-    this.storyService.likeStory(_id);
-  }
 }

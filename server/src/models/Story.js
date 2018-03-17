@@ -43,10 +43,12 @@ class Story extends StoryModel {
     static async likeAStory(idUser, idStory) {
         checkObjectIds([idUser, idStory]);
         const updateObject = { $addToSet: { fans: idUser } };
-        const story = await Story.findByIdAndUpdate(idStory, updateObject, { new: true });
+        const story = await Story.findOneAndUpdate({ _id: idStory, fans: { $nin: [idUser] } }, updateObject, { new: true });
         if (!story) throw new MyError('Cannot find story', CANNOT_FIND_STORY, 404);
         return story;
     }
 }
 
 module.exports = Story;
+
+// { _id, fans: [idU1, idU2] }
