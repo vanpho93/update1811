@@ -24,6 +24,7 @@ import { MustBeGuestGuard } from './must-be-guest.guard';
 import { UserService } from './services/user.service';
 import { StoryService } from './services/story.service';
 import { RequestWithToken } from './services/request-with-token.service';
+import { StoryComponent } from './story/story.component';
 
 const routesConfig: Routes = [
   { path: '', component: HomePageComponent },
@@ -44,7 +45,8 @@ const routesConfig: Routes = [
     SignUpComponent,
     SignInComponent,
     ForgotPasswordComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    StoryComponent
   ],
   imports: [
     BrowserModule,

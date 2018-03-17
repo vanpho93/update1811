@@ -3,3 +3,4 @@ body { background-color: #003847; }
 label, p { color: bisque; }
 nav { margin: 20px 0; }
 nav a.active { background-color: #E44F26 !important; border-color: #C94B2B !important; }
+h5 { color: #E5F6D8 }

@@ -29,8 +29,12 @@ export class HomePageComponent implements OnInit {
   
   createStory() {
     const { content } = this.storyForm.value;
-    console.log('content =', content);
     this.storyService.createStory(content)
-    .catch(error => console.log(error));
+    .catch(error => console.log(error))
+    .then(() => this.storyForm.patchValue({ content: '' }));
+  }
+
+  likeStory(_id) {
+    this.storyService.likeStory(_id);
   }
 }

@@ -8,8 +8,7 @@
     <button class="btn btn-success">Đăng</button>
   </form>
   <div class="story-container">
-    <div class="story" *ngFor="let story of (stories | async)">
-      <pre>{{ story | json }}</pre>
-    </div>
+      <app-story [storyInfo]="story" *ngFor="let story of (stories | async)">
+      </app-story>
   </div>
 </div>

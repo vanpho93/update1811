@@ -1,0 +1,10 @@
+.story {
+    padding: 10px;
+    background-color: gray;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+a.like {
+    color: floralwhite;
+}

@@ -1,0 +1,14 @@
+<div class="story">
+  <h5>{{storyInfo.author.name}}</h5>
+  <p>{{storyInfo.content}}</p>
+  <a class="like" (click)="likeStory(story._id)">
+    {{ storyInfo.fans.length }} likes
+  </a>
+  <hr>
+  <p *ngFor="let comment of storyInfo.comments">{{ comment.user.name }}: {{ comment.content }}</p>
+  <input
+    [(ngModel)]="comment"
+    class="form-control"
+    placeholder="Comment..."
+    (keyup.enter)="addComment()">
+</div>

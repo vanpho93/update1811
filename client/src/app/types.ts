@@ -12,7 +12,9 @@ export interface User {
 export interface Story {
     _id: string;
     content: string;
-    author: { name: string }
+    author: { name: string };
+    fans: User[];
+    comments: any[];
 }
 
 export interface AppState {
