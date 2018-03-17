@@ -30,4 +30,8 @@ export class MessagesComponent implements OnInit {
   acceptFriend(_id: string) {
     this.friendService.acceptFriend(_id);
   }
+
+  removeFriend(_id: string) {
+    this.friendService.removeFriend(_id);
+  }
 }

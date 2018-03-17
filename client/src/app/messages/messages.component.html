@@ -2,7 +2,7 @@
 <div *ngFor="let friend of (friends | async)">
     <p>
       {{ friend.name }}
-      <button class="btn btn-danger">
+      <button class="btn btn-danger" (click)="removeFriend(friend._id)">
         Remove
       </button>
     </p>

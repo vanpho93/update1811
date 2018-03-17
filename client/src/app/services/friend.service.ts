@@ -41,4 +41,15 @@ export class FriendService {
         })
         .catch(error => console.log(error));
     }
+
+    removeFriend(idFriend: string) {
+        this.request.delete(`/friend/${idFriend}`, {})
+        .then(response => {
+            const { success, friend } = response;
+            if (!success) return;
+            // console.log(response);
+            this.store.dispatch({ type: 'REMOVE_FRIEND', _id: idFriend, friend });
+        })
+        .catch(error => console.log(error));
+    }
 }
