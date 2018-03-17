@@ -21,4 +21,8 @@ export interface AppState {
     checked: boolean;
     user: User;
     stories: Story[];
+    friends: User[];
+    incommingRequests: User[];
+    sentRequests: User[];
+    otherUsers: User[];
 }

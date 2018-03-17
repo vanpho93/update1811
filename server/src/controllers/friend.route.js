@@ -6,6 +6,17 @@ const mustBeUser = require('./mustBeUser.middleware');
 const friendRoute = express.Router();
 friendRoute.use(mustBeUser)
 
+friendRoute.get('/', (req, res) => {
+    User.getUsers(req.idUser)
+    .then(users => res.send({ success: true, users }))
+    .catch(error => {
+        console.log(error);
+        res
+        .status(error.statusCode)
+        .send({ success: false, message: error.message, code: error.code });
+    });
+});
+
 friendRoute.post('/request', parser, (req, res) => {
     User.addFriend(req.idUser, req.body.idFriend)
     .then(friend => res.send({ success: true, friend }))

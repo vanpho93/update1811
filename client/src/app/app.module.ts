@@ -13,10 +13,15 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { StoryComponent } from './story/story.component';
 // reducers
 import { checkedReducer } from './ngrx/checked';
 import { userReducer } from './ngrx/user';
 import { storiesReducer } from './ngrx/stories';
+import { friendsReducer } from './ngrx/friends';
+import { inCommingRequestsReducer } from './ngrx/incommingRequests';
+import { sentRequestsReducer } from './ngrx/sentRequests';
+import { otherUsersReducer } from './ngrx/otherUsers';
 // guards
 import { MustLoggedInGuard } from './must-logged-in.guard';
 import { MustBeGuestGuard } from './must-be-guest.guard';
@@ -24,7 +29,7 @@ import { MustBeGuestGuard } from './must-be-guest.guard';
 import { UserService } from './services/user.service';
 import { StoryService } from './services/story.service';
 import { RequestWithToken } from './services/request-with-token.service';
-import { StoryComponent } from './story/story.component';
+import { FriendService } from './services/friend.service';
 
 const routesConfig: Routes = [
   { path: '', component: HomePageComponent },
@@ -57,7 +62,11 @@ const routesConfig: Routes = [
     StoreModule.forRoot({
       user: userReducer,
       checked: checkedReducer,
-      stories: storiesReducer
+      stories: storiesReducer,
+      friends: friendsReducer,
+      otherUsers: otherUsersReducer,
+      sentRequests: sentRequestsReducer,
+      incommingRequests: inCommingRequestsReducer
     })
   ],
   providers: [
@@ -65,7 +74,8 @@ const routesConfig: Routes = [
     MustBeGuestGuard,
     RequestWithToken,
     UserService,
-    StoryService
+    StoryService,
+    FriendService
   ],
   bootstrap: [AppComponent]
 })

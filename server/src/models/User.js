@@ -107,7 +107,7 @@ class User extends UserModel {
         }
         return friend;
     }
-
+    
     static async removeFriend(idUser, idFriend) {
         checkObjectIds([idUser, idFriend]);
         const queryObject1 = { _id: idUser, friends: { $all: [idFriend] } };
@@ -116,6 +116,17 @@ class User extends UserModel {
         const friend = await User.findByIdAndUpdate(idFriend, { $pull: { friends: idUser } }).select(['email', 'name', 'stories']);
         if (!friend) throw new MyError('Cannot find user', CANNOT_FIND_USER, 404);
         return friend;
+    }
+
+    static async getUsers(idUser) {
+        checkObjectIds([idUser]);
+        const { friends } = await User.findById(idUser, { friends: 1 }).populate('friends', 'name');
+        const { sentRequests } = await User.findById(idUser, { sentRequests: 1 }).populate('sentRequests', 'name');
+        const { incommingRequests } = await User.findById(idUser, { incommingRequests: 1 }).populate('incommingRequests', 'name');
+        const knownUsers = friends.concat(sentRequests).concat(incommingRequests);
+        const _idKnownUsers = knownUsers.map(u => u._id).concat(idUser);
+        const otherUsers = await User.find({ _id: { $nin: _idKnownUsers } }, { name: 1 })
+        return { friends, sentRequests, incommingRequests, otherUsers };
     }
 }
 

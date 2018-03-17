@@ -1,3 +1,39 @@
-<p>
-  messages works!
-</p>
+<h3>Friends</h3>
+<div *ngFor="let friend of (friends | async)">
+    <p>
+      {{ friend.name }}
+      <button class="btn btn-danger">
+        Remove
+      </button>
+    </p>
+</div>
+<h3>Sent Requests</h3>
+<div *ngFor="let friend of (sentRequests | async)">
+    <p>
+      {{ friend.name }}
+      <button class="btn btn-danger">
+        Cancel
+      </button>
+    </p>
+</div>
+<h3>Incomming Request</h3>
+<div *ngFor="let friend of (incommingRequests | async)">
+    <p>
+      {{ friend.name }}
+      <button class="btn btn-success" (click)="acceptFriend(friend._id);">
+        Accept
+      </button>
+      <button class="btn btn-danger">
+        Cancel
+      </button>
+    </p>
+</div>
+<h3>Others</h3>
+<div *ngFor="let friend of (otherUsers | async)">
+  <p>
+    {{ friend.name }}
+    <button class="btn btn-success" (click)="addFriend(friend._id)">
+      Add friend
+    </button>
+  </p>
+</div>
